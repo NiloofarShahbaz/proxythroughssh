@@ -21,6 +21,8 @@ services:
   http_proxy:
     build:
       context: http_proxy/
+      args: 
+        - NP_SOCKS_PORT=${NP_SOCKS_PORT}
     image: http_proxy:1.0
     restart: unless-stopped
     hostname: http_proxy
