@@ -3,9 +3,9 @@ version: "3"
 services:
   socks_proxy:
     build:
-      context: .
+      context: socks_proxy/
     image: socks_proxy:1.0
-    restart: always
+    restart: unless-stopped
     tty: true
     hostname: socks_proxy
     ports: 
@@ -17,3 +17,19 @@ services:
     volumes:
       - "~/.ssh/known_hosts:/root/.ssh/known_hosts"
       - "~/.ssh/id_rsa:/root/.ssh/id_rsa:ro"
+
+  http_proxy:
+    build:
+      context: http_proxy/
+    image: http_proxy:1.0
+    restart: unless-stopped
+    hostname: http_proxy
+    ports:
+      - ${NP_HTTP_PORT}:${NP_HTTP_PORT}
+    environment:
+      - NP_SOCKS_PORT=${NP_SOCKS_PORT}
+      - NP_HTTP_PORT=${NP_HTTP_PORT}
+    cap_add:
+      - NET_ADMIN
+    depends_on:
+      - socks_proxy
