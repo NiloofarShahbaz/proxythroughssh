@@ -1,0 +1,19 @@
+version: "3"
+
+services:
+  socks_proxy:
+    build:
+      context: .
+    image: socks_proxy:1.0
+    restart: always
+    tty: true
+    hostname: socks_proxy
+    ports: 
+      - ${NP_SOCKS_PORT}:${NP_SOCKS_PORT}
+    environment:
+      - NP_USERNAME=${NP_USERNAME}
+      - NP_HOST=${NP_HOST}
+      - NP_SOCKS_PORT=${NP_SOCKS_PORT}
+    volumes:
+      - "~/.ssh/known_hosts:/root/.ssh/known_hosts"
+      - "~/.ssh/id_rsa:/root/.ssh/id_rsa:ro"
